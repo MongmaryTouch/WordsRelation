@@ -20,7 +20,7 @@ public class TestApp {
 //		myDB.insertToDatabase(myUrl, myConn, nlpResults);
 		
 		DatabaseHelper helper = new DatabaseHelper(myUrl, myConn, "WordsTable");
-//		helper.insert("Mary", "TheBest3", 3);
+		helper.insert("Thiago", "isOkay", 5);
 //		helper.updateFrequency("Mary", "TheBest", 1);
 //		helper.getRelatedWords("Mary");
 //		helper.getFrequency("Mary", "TheBest3");

@@ -27,7 +27,7 @@ public class DatabaseHelper {
 
 	
 	// add a row into the database
-	private void prepareTheDB(String keyword1, String keyword2, int freq, String query) {
+	private void addToDB(String keyword1, String keyword2, int freq, String query) {
 		try {
 			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
 			preparedStmt.setString (1, keyword1);
@@ -46,7 +46,36 @@ public class DatabaseHelper {
 	public void insert(String keyword1, String keyword2, int freq) { // query:(id, key1, key2, freq) where id is autoincrement
 		String query = " insert into WordsTable (Key1, Key2, Frequency)"
 				+ " values (?, ?, ?)";
-		prepareTheDB(keyword1, keyword2, freq, query);
+
+		Boolean keyPairExist = searchKeyPair(keyword1, keyword2);
+		if(keyPairExist) {   // if pair already exist, update frequency
+			updateFrequency(keyword1, keyword2, freq);
+			return;
+		}
+		addToDB(keyword1, keyword2, freq, query); // else add to database
+	}
+	
+	
+	// traverse through database to search for keys pair
+	private Boolean searchKeyPair(String keyword1, String keyword2) {
+		Boolean pairExist = false;
+		ResultSet resultSet = null;
+
+		String query = String.format("SELECT EXISTS(SELECT * FROM %s "
+				+ "WHERE %s.Key1 = '%s' and %s.Key2 = '%s')", 
+				this.table, this.table, keyword1, this.table, keyword2);
+		try {
+			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
+			resultSet = preparedStmt.executeQuery();
+			while(resultSet.next()) {
+				pairExist = resultSet.getBoolean(1);
+			}
+			preparedStmt.execute();
+			preparedStmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pairExist;
 	}
 	
 
