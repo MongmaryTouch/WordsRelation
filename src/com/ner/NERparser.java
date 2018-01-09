@@ -1,8 +1,11 @@
+// Name: Mong Mary Touch
 package com.ner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import com.object.*;
 
 import edu.stanford.nlp.coref.docreader.CoNLLDocumentReader.NamedEntityAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.NamedEntityTagAnnotation;
@@ -17,7 +20,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 public class NERparser {
-	public List<String> getNERfromSentence(String line) {
+	public List<Sentence> getNERfromSentence(String line) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
@@ -26,21 +29,26 @@ public class NERparser {
 		pipeline.annotate(document);
 		
 		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-		List<String> keysList = new ArrayList();
+		List<Sentence> sentenceList = new ArrayList();
 		
 		for(CoreMap sentence : sentences) {
+			Sentence sentenceObj = new Sentence(sentence.toString());
 			for (CoreLabel token : sentence.get(TokensAnnotation.class)) {
 				String word = token.get(TextAnnotation.class);
+				String pos = token.get(PartOfSpeechAnnotation.class); 
 				String ner = token.get(NamedEntityTagAnnotation.class);
 				
 				Boolean isNer = isStrNER(ner);
 				if(isNer) {
-//					keysList.add("/*" + word + " is " + ner + "*/");
-					keysList.add(word);
+					Word wordObj = new Word(word);
+					wordObj.setPos(pos);
+					wordObj.setNer(ner);
+					sentenceObj.addWord(wordObj);
 				}
 			}
+			sentenceList.add(sentenceObj);
 		}
-		return keysList;
+		return sentenceList;
 	}
 	
 	private Boolean isStrNER(String str) {

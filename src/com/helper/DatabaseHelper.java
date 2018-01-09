@@ -1,3 +1,4 @@
+// Name: Mong Mary Touch
 package com.helper;
 
 import java.sql.ResultSet;
@@ -9,23 +10,17 @@ import com.mysql.jdbc.PreparedStatement;
 
 // mySQL helper functions
 public class DatabaseHelper {
-	private String url;
 	private Connection conn;
 	private String table;
 
-	// Default constructor
-	public DatabaseHelper() {
-		System.out.println("Please provide connection, url, or table's name");
-	}
 
 	// constructor that set connection and url
-	public DatabaseHelper(String uniformResourceLocator, Connection connector, String TableName) {
-		this.url = uniformResourceLocator;
+	public DatabaseHelper(Connection connector, String TableName) {
 		this.conn = connector;
 		this.table = TableName;
 	}
 
-	
+
 	// add a row into the database
 	private void addToDB(String keyword1, String keyword2, int freq, String query) {
 		try {
@@ -35,27 +30,29 @@ public class DatabaseHelper {
 			preparedStmt.setInt (3, freq);
 			preparedStmt.execute();
 			preparedStmt.close();
-			conn.close();
+			//			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	
+
 	// insert data into database
-	public void insert(String keyword1, String keyword2, int freq) { // query:(id, key1, key2, freq) where id is autoincrement
+	public void insert(String keyword1, String keyword2) { // query:(id, key1, key2, freq) where id is autoincrement
+		int freq = 1;
 		String query = " insert into WordsTable (Key1, Key2, Frequency)"
 				+ " values (?, ?, ?)";
 
 		Boolean keyPairExist = searchKeyPair(keyword1, keyword2);
 		if(keyPairExist) {   // if pair already exist, update frequency
-			updateFrequency(keyword1, keyword2, freq);
+			freq = getFrequency(keyword1, keyword2) + 1; 
+			updatePair(keyword1, keyword2, freq);
+			System.out.println("freq: " + freq);
 			return;
 		}
-		addToDB(keyword1, keyword2, freq, query); // else add to database
+		addToDB(keyword1, keyword2, freq, query); // else add to database for the first time
 	}
-	
-	
+
 	// traverse through database to search for keys pair
 	private Boolean searchKeyPair(String keyword1, String keyword2) {
 		Boolean pairExist = false;
@@ -77,36 +74,36 @@ public class DatabaseHelper {
 		}
 		return pairExist;
 	}
-	
+
 
 	// update frequency of occurrence
-	public void updateFrequency(String keyword1, String keyword2, int num) {
+	public void updatePair(String keyword1, String keyword2, int num) {
 		int tempID = getID(keyword1, keyword2);
-		
+
 		if(tempID == -1) {
 			System.out.println("ERROR in getting ID.");
-//			throw new NoIDfoundException();
+			//			throw new NoIDfoundException();
 		}
 
 		String updateQuery = String.format("UPDATE %s SET %s.Frequency = ? "
 				+ "WHERE id = %d", this.table, this.table, tempID);
-		
+
 		try {
 			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(updateQuery);
 			preparedStmt.setInt(1, num);
 			preparedStmt.executeUpdate();
-			conn.close();
+			//			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	
+
 	// get frequency of a pair of words
 	public int getFrequency(String keyword1, String keyword2) {
 		int freq = -1;
 		ResultSet resultSet = null;
-		
+
 		// from the getID function, use it to get the frequency
 		String query = String.format("SELECT %s.Frequency FROM %s "
 				+ "WHERE %s.Key1 = '%s' and %s.Key2 = '%s'", 
@@ -124,8 +121,8 @@ public class DatabaseHelper {
 		} 
 		return freq;
 	}
-	
-	
+
+
 	// get the id of the row or words pair
 	private int getID(String keyword1, String keyword2) {
 		int tempID = -1;
@@ -146,15 +143,15 @@ public class DatabaseHelper {
 		} 
 		return tempID;
 	}
-	
-	
+
+
 	// given key1, return a list of all its related key2's
 	public List<String> getRelatedWords(String keyword) {
 		ResultSet resultSet = null;
-		List<String> relatedList = new ArrayList();
-		
+		List<String> relatedList = new ArrayList<String>();
+
 		String query = String.format("SELECT * FROM %s WHERE %s.Key1 = '%s'", this.table, this.table, keyword);
-		
+
 		try {
 			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
 			resultSet = preparedStmt.executeQuery();
@@ -173,13 +170,13 @@ public class DatabaseHelper {
 		return relatedList;
 	}
 
-	
+
 	// delete a row from database using words 
 	public void deleteByWordsPair(String keyword1, String keyword2) {
 		deleteByID(getID(keyword1, keyword2));
 	}
-	
-	
+
+
 	// delete a row from database using id
 	public void deleteByID(int id) {
 		String query = String.format("DELETE FROM %s where %s.id = %d", this.table, this.table, id);

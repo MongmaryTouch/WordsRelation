@@ -1,9 +1,15 @@
+// Name: Mong Mary Touch
 package com.database;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
+
+import com.helper.DatabaseHelper;
+import com.ner.NERparser;
+import com.object.Sentence;
+import com.object.Word;
+import com.object.WordRelatable;
+import com.mysql.jdbc.Connection;
 
 /*
  * Get connection, create a statement, and execute SQL insert
@@ -11,68 +17,46 @@ import java.util.concurrent.Callable;
 
 public class MySqlDB {
 
-	// update frequency of the related keywords found
-	public int updateFreq(int freq) {
-		return freq++;
-	}
-
-	private static List<? extends List<String>> makePair(List<String> strList) {
-		final List<? extends List<String>> pairList = new ArrayList<>();
-
-		for (int fromIndex = 0; fromIndex < strList.size()-1; fromIndex++) {
-			for (int j = fromIndex+1; j < strList.size(); j++) {
-				System.out.println(fromIndex + strList.get(fromIndex) + " , "+ j+strList.get(j));
-				//pairList.add(strList.get(fromIndex), strList.get(j));
-				//pairList.add(strList.subList(fromIndex, j));
-				//System.out.println("After: " + pairList);
-			}
-			
-//			pairList.add(strList.subList(fromIndex, j));
-			
-		}
+	// make pair of words
+	public List<WordRelatable> makePair(String str) {
+		NERparser nerParser = new NERparser();
+		List<Sentence> sentences = nerParser.getNERfromSentence(str);
+		List<WordRelatable> wordRelatableList = new ArrayList();
 		
-		return pairList;
+		for(Sentence sentence : sentences) {
+			for(Word word1 : sentence.getWordList()) {
+				for(Word word2 : sentence.getWordList()) {
+					if(word1 != word2) { // compare Word objects
+						WordRelatable relatable = new WordRelatable(word1, word2);
+						
+						Boolean isSame = searchWordRelatable(relatable, wordRelatableList);
+						if(!isSame) {
+							wordRelatableList.add(relatable);
+						}
+					}
+				}
+			}
+		}
+		return wordRelatableList;
 	}
 	
-	
+	private Boolean searchWordRelatable(WordRelatable wordPair, List<WordRelatable> wordRelatableList) {
+		Boolean isSamePair = true;
+		if (wordRelatableList.isEmpty()) return false;
+		for (WordRelatable relateWords : wordRelatableList) {
+			if (relateWords.getWord1() == wordPair.getWord2() && relateWords.getWord2() == wordPair.getWord1()) {
+				isSamePair = true;
+				return isSamePair;
+			}
+		}
+		return false;
+	}
 
-	public static void insertToDatabase(String myUrl, Connection myConn, List<String> wordsList) throws SQLException {
-
-		// makePair()
-//		List<List<String>> keyPairs = makePair(wordsList);
-
-//		for (List<String> keyPair : keyPairs) {
-			
-			// check each pair to see if one of the keyword exist in the database
-//			System.out.println("Pair: " + keyPair);
-			
-			
-//			// check to see if the keywords are already in the table
-//			String query = " insert into WordsTable (Key1, Key2, Frequency)"
-//					+ " values (?, ?, ?)";
-//
-//			// create the mysql insert preparedstatement
-//			PreparedStatement preparedStmt;
-//			try {
-//				preparedStmt = myConn.prepareStatement(query);
-//
-//				// call a function to determine their relationship in the database. use call procedure
-//				//preparedStmt.setInt(1, 1);
-//				preparedStmt.setString (1, "key1");
-//				preparedStmt.setString (2, "key2");
-//				preparedStmt.setInt (3, 1);
-//
-//				// callable statement
-//				// Callable myStmt2 = myConn.prepareCall("{call updateFunction(?,?)}");
-//
-//				// execute the preparedstatement
-//				preparedStmt.execute();
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-
-		myConn.close();
+	public void insertToDatabase(Connection myConn, String table, String str) {
+		List<WordRelatable> keyPairsList = this.makePair(str);
+		for (WordRelatable keyPair : keyPairsList) {
+			DatabaseHelper dBase = new DatabaseHelper(myConn, table);
+			dBase.insert(keyPair.getWord1().getWord(), keyPair.getWord2().getWord());
+		}
 	}
 }
