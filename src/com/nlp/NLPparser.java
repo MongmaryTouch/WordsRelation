@@ -30,7 +30,7 @@ public class NLPparser {
 		// these are all the sentences in this document
 		// a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
 		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-		List<Sentence> sentenceList = new ArrayList();
+		List<Sentence> sentenceList = new ArrayList<Sentence>();
 		
 		for(CoreMap sentence: sentences) {
 			Sentence sentenceObj = new Sentence(sentence.toString());

@@ -10,17 +10,20 @@ public class Sentence {
 	
 	public Sentence(String sentence) {
 		this.sentence = sentence;
-		this.wordList = new ArrayList();
+		this.wordList = new ArrayList<Word>();
 	}
 	
 	public List<Word> getWordList() {
 		return this.wordList;
 	}
 	
+	public String getSentence() {
+		return this.sentence;
+	}
+	
+	// split sentence and store in wordList
 	public void addWord(Word word) {
-		// split sentence and store in wordList
 		wordList.add(word);
-		
 	}
 	
 }
