@@ -24,15 +24,17 @@ public class PageContentCollector {
 	public String collectContent(String httpLink) throws Exception {
 		try {
 			Document doc = Jsoup.connect(httpLink).get();
-			Elements elements = doc.select("*");
+//			System.out.println(doc.text());
 			
-			for (Element element : elements) {
-				if(!element.text().startsWith("http") ) {
-//						&& !element.text().equals("") 
-//						&& (element.text().length() > 2)) {
-						System.out.println("tag: " + element.tagName() + " " + element.text());
-				}
-			}
+//			Elements elements = doc.select("*");
+//			
+//			for (Element element : elements) {
+//				if(!element.text().startsWith("http") ) {
+////						&& !element.text().equals("") 
+////						&& (element.text().length() > 2)) {
+//						System.out.println("tag: " + element.tagName() + " " + element.text());
+//				}
+//			}
 			
 			
 			// check news link title and date to see if it has already been visited
