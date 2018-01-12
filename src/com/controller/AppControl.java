@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.MySqlDB;
-import com.linksCollector.LinksCollector;
+import com.database.WordsDatabase;
+import com.links.LinksCollector;
 import com.mysql.jdbc.Connection;
 import com.ner.NERparser;
 import com.object.CompleteSentence;
@@ -62,7 +62,7 @@ public class AppControl {
 //			}
 			
 			// connect to mySql database
-			MySqlDB sql = new MySqlDB(myConn, "WordsTable");
+			WordsDatabase sql = new WordsDatabase(myConn, "WordsTable");
 			sql.insertToDatabase(relatedWords);
 		} catch (Exception e) {
 			e.printStackTrace();

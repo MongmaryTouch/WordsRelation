@@ -1,6 +1,6 @@
 // Name: Mong Mary Touch
-// Get all links on a site
-package com.linksCollector;
+// Get all the links associated with a given source site
+package com.links;
 
 import java.io.IOException;
 import java.util.ArrayList;

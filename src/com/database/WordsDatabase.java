@@ -1,5 +1,5 @@
 // Name: Mong Mary Touch
-// mySql can insert, delete and update pair of keywords
+// Class that inserts, deletes and updates pair of keywords
 package com.database;
 
 import java.sql.ResultSet;
@@ -14,13 +14,13 @@ import com.mysql.jdbc.PreparedStatement;
  * Get connection, create a statement, and execute SQL insert
  */
 
-public class MySqlDB {
+public class WordsDatabase {
 	private Connection conn;
 	private String table;
 
 
 	// constructor that set connection and table's name
-	public MySqlDB(Connection connector, String TableName) {
+	public WordsDatabase(Connection connector, String TableName) {
 		this.conn = connector;
 		this.table = TableName;
 	}
@@ -199,6 +199,4 @@ public class MySqlDB {
 			insert(keyPair.getWord1().getWord(), keyPair.getWord2().getWord());
 		}
 	}
-	
-	
 }
