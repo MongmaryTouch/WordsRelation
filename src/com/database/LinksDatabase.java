@@ -42,7 +42,7 @@ public class LinksDatabase {
 				preparedStmt.setString (2, link);
 				preparedStmt.setString (3, title);
 				preparedStmt.setString (4, date);
-				preparedStmt.setString (5, status);	// Default status
+				preparedStmt.setString (5, status);	
 				 
 				preparedStmt.execute();
 				preparedStmt.close();
@@ -54,20 +54,59 @@ public class LinksDatabase {
 	}
 	
 	
+	// check status of a link
+	public String checkStatus(String link) {
+		String stat = "";
+		ResultSet resultSet = null;
+		
+		int id = getID(link);
+		
+		String query = String.format("SELECT %s.Status FROM %s "
+				+ "WHERE %s.id = %d", 
+				this.table, this.table, this.table, id);
+		try {
+			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
+			resultSet = preparedStmt.executeQuery();
+			while(resultSet.next()) {
+				stat = resultSet.getString(1);
+			}
+			preparedStmt.execute();
+			preparedStmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return stat;
+	}
+	
+	
+	// has the link visited?
+	public Boolean isVisited(String link) {
+		String status = checkStatus(link);
+		return (status.equals("YES") || status.equals("yes") || status.equals("Yes") || status.equals("Y")) ? true : false;
+	}
+	
+	
 	// check whether the link is already exist
 	public Boolean isLinkExist(String link) {
 		Boolean existed = false;
 		ResultSet resultSet = null;
 		
+//		int id = getID(link);
+//		if(id == -1) return false;
+		
+//		String query = String.format("SELECT EXISTS(SELECT * FROM %s "
+//				+ "WHERE %s.id = '%d')", 
+//				this.table, this.table, id);
+		
 		String query = String.format("SELECT EXISTS(SELECT * FROM %s "
-				+ "WHERE %s.Link = '%s')", 
+				+ "WHERE %s.link = '%s')", 
 				this.table, this.table, link);
+		
 		try {
 			PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
 			resultSet = preparedStmt.executeQuery();
 			while(resultSet.next()) {
 				existed = resultSet.getBoolean(1);
-				System.out.println(existed);
 			}
 			preparedStmt.execute();
 			preparedStmt.close();
@@ -144,24 +183,5 @@ public class LinksDatabase {
 			e.printStackTrace();
 		} 
 		return id;
-	}
-	
-	
-	public static void main(String[] args) {
-//		String guid = "guidTest-3";
-		String link = "http://link-test-page3";
-//		String title = "Mary is the best of the best LIKE EVER";
-//		String date = "Sat, 13 Jan 2018 01:01:01 -1100";
-		Connection myConn;
-		try {
-			myConn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/WordsRelationSql?autoReconnect=true&useSSL=false", "root", "admin");
-			LinksDatabase obj = new LinksDatabase(myConn, "LinksTable");
-			obj.updateStatus(link, "YES");
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
 	}
 }

@@ -18,6 +18,7 @@ public class LinkNode {
 		return this.guid;
 	}
 	
+	// set link
 	public void setLink(String link) {
 		this.link = link;
 	}
