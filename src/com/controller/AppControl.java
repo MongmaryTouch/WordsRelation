@@ -7,7 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dao.exampleDAO;
+import com.dao.exampleDAOImpl;
 import com.database.LinksDatabase;
+import com.database.WordsDatabase;
 import com.links.LinkNode;
 import com.links.LinkParser;
 import com.mysql.jdbc.Connection;
@@ -16,6 +19,7 @@ import com.object.CompleteSentence;
 import com.object.MakePair;
 import com.object.Sentence;
 import com.object.StanfordSentencesAnnotation;
+import com.object.Word;
 import com.object.WordRelatable;
 import com.pageCollector.PageContentCollector;
 
@@ -61,7 +65,7 @@ public class AppControl {
 			// collect page's content
 			PageContentCollector page = new PageContentCollector();
 			String pageContent = page.collectContent(link);
-			System.out.println("Link: " + link+ " :: "+ pageContent);
+//			System.out.println("Link: " + link+ " :: "+ pageContent);
 			
 			// get sentences in a document/content
 			StanfordSentencesAnnotation sentenceAnnotator = new StanfordSentencesAnnotation();
@@ -80,13 +84,13 @@ public class AppControl {
 			List<WordRelatable> relatedWords = pairs.makePair(nerSentencesList);
 
 			// print out key pair
-			for (WordRelatable keyPair : relatedWords) {
-				System.out.println(keyPair.getWord1().getWord() + " : " + keyPair.getWord2().getWord());
-			}
+//			for (WordRelatable keyPair : relatedWords) {
+//				System.out.println(keyPair.getWord1().getWord() + " : " + keyPair.getWord2().getWord());
+//			}
 			
 			// connect to mySql database
-//			WordsDatabase sql = new WordsDatabase(myConn, "WordsTable");
-//			sql.insertToDatabase(relatedWords);
+			WordsDatabase sql = new WordsDatabase(myConn, "WordsTable");
+			sql.insertToDatabase(relatedWords);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,7 +98,13 @@ public class AppControl {
 	
 	public static void main(String[] args) throws SQLException {
 		AppControl obj = new AppControl();
-		obj.run();
+//		obj.run();
+		exampleDAO ex = new exampleDAOImpl();
+		
+		WordRelatable pair = new WordRelatable(new Word("Mary"), new Word("Thiago"));
+		pair.setID(5);
+		pair.setFrequency(14);
+		ex.update(pair, WordRelatable.WORD2);
 	}
 }
 

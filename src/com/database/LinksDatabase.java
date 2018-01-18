@@ -184,4 +184,26 @@ public class LinksDatabase {
 		} 
 		return id;
 	}
+	
+	
+	public static void main(String[] args) {
+//		String guid = "guidTest-3";
+		String link = "http://link-test-page3";
+//		String title = "Mary is the best of the best LIKE EVER";
+//		String date = "Sat, 13 Jan 2018 01:01:01 -1100";
+		Connection myConn;
+		try {
+			myConn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/WordsRelationSql?autoReconnect=true&useSSL=false", "root", "admin");
+			LinksDatabase obj = new LinksDatabase(myConn, "LinksTable");
+//			obj.updateStatus(link, "YES");
+//			obj.checkStatus(link);
+//			System.out.println(obj.isVisited(link));
+			System.out.println(obj.isLinkExist(link));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 }

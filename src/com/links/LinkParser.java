@@ -19,15 +19,15 @@ public class LinkParser {
 		
 		try {
 			doc = Jsoup.connect(src).get();
-			Elements links = doc.select("rss channel item");
+			Elements items = doc.select("rss channel item");
 			
-			for (Element link : links) {
+			for (Element item : items) {
 				LinkNode linkNode = new LinkNode();
 				
-				linkNode.setLink(link.getElementsByTag("link").text());
-				linkNode.setGuid(link.getElementsByTag("guid").text());
-				linkNode.setTitle(link.getElementsByTag("title").text());
-				linkNode.setDate(link.getElementsByTag("pubDate").text());
+				linkNode.setLink(item.getElementsByTag("link").text());
+				linkNode.setGuid(item.getElementsByTag("guid").text());
+				linkNode.setTitle(item.getElementsByTag("title").text());
+				linkNode.setDate(item.getElementsByTag("pubDate").text());
 				
 				linksList.add(linkNode);
 			}

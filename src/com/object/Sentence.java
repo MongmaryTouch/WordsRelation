@@ -23,6 +23,7 @@ public class Sentence {
 	
 	// split sentence and store in wordList
 	public void addWord(Word word) {
+//		System.out.println(word.getWord());
 		wordList.add(word);
 	}
 	
