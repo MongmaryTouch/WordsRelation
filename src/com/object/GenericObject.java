@@ -15,17 +15,19 @@ public class GenericObject {
 		return map.get(key);
 	}
 	
-	public void setID(int id) {
-		this.put(ID, id);
+	public void setID(int i) {
+		this.put(ID, i);
 	}
 	
-	public int getID() {
-		return (int) this.get(ID);
+	public Integer getID() {
+		return (Integer) this.get(ID);
 	}
 	
 	public void setMap(Map<String, Object> map) {
 		this.map = map;
 	}
 	
-	// add more code
+	public Map<String, Object> getMap() {
+		return this.map;
+	}
 }

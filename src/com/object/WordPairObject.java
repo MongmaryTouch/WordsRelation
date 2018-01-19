@@ -1,13 +1,19 @@
 // Name: Mong Mary Touch
 package com.object;
 
-public class WordRelatable extends GenericObject{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class WordPairObject extends GenericObject{
 
 	public static final String WORD1 = "Key1";
 	public static final String WORD2 = "Key2";
 	public static final String FREQUENCY = "Frequency";
+	public static final String ID = "id";
 
-	public WordRelatable(Word keyword1, Word keyword2) {
+	
+	public WordPairObject(Word keyword1, Word keyword2) {
 		this.setWord1(keyword1);
 		this.setWord2(keyword2);
 	}
@@ -35,5 +41,21 @@ public class WordRelatable extends GenericObject{
 	public int getFrequency() {
 		return (int) this.get(FREQUENCY);
 	}
+
+	@Override
+	public void setMap(Map map) {
+		super.setMap(map);
+		setWord1(new Word((String) map.get(WORD1)));
+		setWord2(new Word((String) map.get(WORD2)));
+	}
+	
+//	@Override
+//	public List<Object> getMap() {
+//		super.getMap();
+//		
+//		List<Object> mapList = new ArrayList();
+//		
+//		return mapList;
+//	}
 	
 }

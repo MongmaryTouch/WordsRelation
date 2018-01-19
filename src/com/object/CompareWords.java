@@ -4,7 +4,7 @@ package com.object;
 
 public class CompareWords {
 
-	public WordRelatable orderPair(Word word1, Word word2) {
+	public WordPairObject orderPair(Word word1, Word word2) {
 		String key1 = word1.getWord();
 		String key2 = word2.getWord();
 		
@@ -13,7 +13,7 @@ public class CompareWords {
 			key1 = key2;
 			key2 = temp;
 		}
-		return new WordRelatable(new Word(key1), new Word(key2));
+		return new WordPairObject(new Word(key1), new Word(key2));
 	}
 	
 	public static void main(String[] args) { 
@@ -21,7 +21,7 @@ public class CompareWords {
 		Word word2 = new Word("");
 		
 		CompareWords wordPair = new CompareWords();
-		WordRelatable result = wordPair.orderPair(word1, word2);
+		WordPairObject result = wordPair.orderPair(word1, word2);
 		System.out.println(result.getWord1().getWord() + ":" + result.getWord2().getWord());
 	}
 }

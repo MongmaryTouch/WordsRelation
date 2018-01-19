@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dao.exampleDAO;
-import com.dao.exampleDAOImpl;
+import com.dao.WordPairDAO;
+import com.dao.WordPairDAOImpl;
 import com.database.LinksDatabase;
 import com.database.WordsDatabase;
 import com.links.LinkNode;
@@ -20,7 +20,7 @@ import com.object.MakePair;
 import com.object.Sentence;
 import com.object.StanfordSentencesAnnotation;
 import com.object.Word;
-import com.object.WordRelatable;
+import com.object.WordPairObject;
 import com.pageCollector.PageContentCollector;
 
 import edu.stanford.nlp.util.CoreMap;
@@ -81,7 +81,7 @@ public class AppControl {
 
 			// generate pairs of related words
 			MakePair pairs = new MakePair();
-			List<WordRelatable> relatedWords = pairs.makePair(nerSentencesList);
+			List<WordPairObject> relatedWords = pairs.makePair(nerSentencesList);
 
 			// print out key pair
 //			for (WordRelatable keyPair : relatedWords) {
@@ -99,12 +99,15 @@ public class AppControl {
 	public static void main(String[] args) throws SQLException {
 		AppControl obj = new AppControl();
 //		obj.run();
-		exampleDAO ex = new exampleDAOImpl();
+//		WordsDAOImpl ex = new WordsDAOImpl("WordsTable");
 		
-		WordRelatable pair = new WordRelatable(new Word("Mary"), new Word("Thiago"));
-		pair.setID(5);
-		pair.setFrequency(14);
-		ex.update(pair, WordRelatable.WORD2);
+		WordPairDAO ex = new WordPairDAOImpl("WordsTable");
+//		List<WordPairObject> pair = ex.fetch500();
+		WordPairObject pair = new WordPairObject(new Word("Mary"), new Word("Thiago"));
+//		ex.save(pair);
+//		ex.delete(pair);
+//		ex.update(pair, pair.FREQUENCY);
+
 	}
 }
 
