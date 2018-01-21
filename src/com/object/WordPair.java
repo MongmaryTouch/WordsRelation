@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class WordPairObject extends GenericObject{
+public class WordPair extends GenericObject{
 
 	public static final String WORD1 = "Key1";
 	public static final String WORD2 = "Key2";
@@ -13,7 +13,7 @@ public class WordPairObject extends GenericObject{
 	public static final String ID = "id";
 
 	
-	public WordPairObject(Word keyword1, Word keyword2) {
+	public WordPair(Word keyword1, Word keyword2) {
 		this.setWord1(keyword1);
 		this.setWord2(keyword2);
 	}

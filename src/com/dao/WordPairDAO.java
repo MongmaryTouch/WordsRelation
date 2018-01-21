@@ -1,16 +1,13 @@
-// Name: Mong Mary Touch
-// Implementing DAO pattern 
 package com.dao;
 
-import java.util.List;
+public class WordPairDAO extends DAOImpl{
 
-import com.object.WordPairObject;
-
-public interface WordPairDAO {
+	public WordPairDAO(String table) {
+		super(table);
+	}
 	
-	void save(WordPairObject pair); // create
-	WordPairObject read(int id); // retrieve
-	void update(WordPairObject pair, String fieldName); // update 
-	void delete(WordPairObject pair); // delete
-	List<WordPairObject> fetch500();
+	// override methods
+	
+	
+
 }

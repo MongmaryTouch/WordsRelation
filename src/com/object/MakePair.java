@@ -13,14 +13,14 @@ import edu.stanford.nlp.util.CoreMap;
 public class MakePair {
 
 	// make pair of related words
-	public List<WordPairObject> makePair(List<Sentence> sentences) {
-		List<WordPairObject> wordRelatableList = new ArrayList<WordPairObject>();
+	public List<WordPair> makePair(List<Sentence> sentences) {
+		List<WordPair> wordRelatableList = new ArrayList<WordPair>();
 		for(Sentence sentence : sentences) {
 			for(Word word1 : sentence.getWordList()) {
 				for(Word word2 : sentence.getWordList()) {
 					if(word1 != word2 && word2 != null) { // compare Word objects
 //						System.out.println(word1.getWord() + " : " + word2.getWord());
-						WordPairObject relatable = new WordPairObject(word1, word2);
+						WordPair relatable = new WordPair(word1, word2);
 
 						Boolean isSame = searchWordPair(relatable, wordRelatableList);
 						if(!isSame) {
@@ -34,9 +34,9 @@ public class MakePair {
 	}
 
 	// search the pair list if the pair is repeated
-	private Boolean searchWordPair(WordPairObject wordPair, List<WordPairObject> wordPairList) {
+	private Boolean searchWordPair(WordPair wordPair, List<WordPair> wordPairList) {
 		if (wordPairList.isEmpty()) return false; // no repeated
-		for (WordPairObject relateWords : wordPairList) {
+		for (WordPair relateWords : wordPairList) {
 			if (relateWords.getWord1() == wordPair.getWord2() && relateWords.getWord2() == wordPair.getWord1()) {
 				return true;
 			}
@@ -66,9 +66,9 @@ public class MakePair {
 			List<Sentence> nerSentencesList = nerParser.getNERfromSentence(completeSentencesList);
 
 			MakePair mkPair = new MakePair();
-			List<WordPairObject> relatedWords = mkPair.makePair(nerSentencesList);
+			List<WordPair> relatedWords = mkPair.makePair(nerSentencesList);
 
-			for (WordPairObject keyPair : relatedWords) {
+			for (WordPair keyPair : relatedWords) {
 				System.out.println(keyPair.getWord1().getWord() + " : " + keyPair.getWord2().getWord());
 			}
 		} catch (Exception e) {

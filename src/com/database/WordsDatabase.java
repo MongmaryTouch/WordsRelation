@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.object.CompareWords;
 import com.object.Word;
-import com.object.WordPairObject;
+import com.object.WordPair;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
@@ -53,7 +53,7 @@ public class WordsDatabase {
 				+ " VALUES (?, ?, ?)", this.table);
 
 		CompareWords curPair = new CompareWords();  // current pair being passed in
-		WordPairObject newPair = curPair.orderPair(new Word(keyword1), new Word(keyword2)); // new pair with words ordered lexicographically
+		WordPair newPair = curPair.orderPair(new Word(keyword1), new Word(keyword2)); // new pair with words ordered lexicographically
 		
 		String newKeyword1 = newPair.getWord1().getWord();
 		String newKeyword2 = newPair.getWord2().getWord();
@@ -151,7 +151,7 @@ public class WordsDatabase {
 		ResultSet resultSet = null;
 		
 		CompareWords curPair = new CompareWords(); 
-		WordPairObject newPair = curPair.orderPair(new Word(keyword1), new Word(keyword2)); 
+		WordPair newPair = curPair.orderPair(new Word(keyword1), new Word(keyword2)); 
 		
 		String newKeyword1 = newPair.getWord1().getWord();
 		String newKeyword2 = newPair.getWord2().getWord();
@@ -224,8 +224,8 @@ public class WordsDatabase {
 	}
 
 	// insert into database
-	public void insertToDatabase(List<WordPairObject> keyPairsList) {
-		for (WordPairObject keyPair : keyPairsList) {
+	public void insertToDatabase(List<WordPair> keyPairsList) {
+		for (WordPair keyPair : keyPairsList) {
 			insert(keyPair.getWord1().getWord(), keyPair.getWord2().getWord());
 		}
 	}
