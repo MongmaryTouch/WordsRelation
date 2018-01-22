@@ -2,7 +2,9 @@
 // RSS information of a link
 package com.links;
 
-public class LinkNode {
+import com.object.GenericObject;
+
+public class LinkNode extends GenericObject{
 	private String guid;
 	private String link;
 	private String title;

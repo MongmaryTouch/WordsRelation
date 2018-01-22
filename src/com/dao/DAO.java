@@ -3,14 +3,13 @@
 package com.dao;
 
 import java.util.List;
-import java.util.Map;
 
-public interface DAO {
+public interface DAO<T>{
 	
-	void insert(Object pair); // create
-	Map read(int id); // retrieve
-	void update(Object pair, Object updatedValue, String fieldName); // update 
-	void delete(Object pair); // delete
-	List<Object> fetch500();
+	void insert(T pair); // create
+	T read(int id); // retrieve
+	void delete(T pair); // delete
+	List<T> fetch500();
+	void update(T object, String fieldName);
 	
 }

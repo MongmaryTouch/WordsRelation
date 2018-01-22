@@ -1,8 +1,6 @@
 // Name: Mong Mary Touch
 package com.object;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class WordPair extends GenericObject{

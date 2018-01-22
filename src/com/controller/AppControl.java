@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.dao.DAO;
 import com.dao.DAOImpl;
+import com.dao.WordPairDAO;
 import com.database.LinksDatabase;
 import com.database.WordsDatabase;
 import com.links.LinkNode;
@@ -17,6 +19,7 @@ import com.links.LinkParser;
 import com.mysql.jdbc.Connection;
 import com.ner.NERparser;
 import com.object.CompleteSentence;
+import com.object.GenericObject;
 import com.object.MakePair;
 import com.object.Sentence;
 import com.object.StanfordSentencesAnnotation;
@@ -98,16 +101,23 @@ public class AppControl {
 	
 	public static void main(String[] args) throws SQLException {
 		
-		DAO ex = new DAOImpl("WordsTable");
+//		DAO ex = new DAOImpl("WordsTable");
 //		WordPair pair = ex.read(5);
 //		pair.setFrequency(pair.getFrequency() + 5);
 		//pair.getMap().remove("id");
-//		ex.update(pair, 5, pair.FREQUENCY);
+//		ex.update(pair, pair.FREQUENCY);
 		
 //		Map map = ex.read(5);
 		
-		List<Object> mapList= ex.fetch500();
-		System.out.println(mapList);
+//		List<GenericObject> mapList= ex.fetch500();
+//		System.out.println(mapList);
+		DAO<WordPair> dao = new WordPairDAO("WordsTable");
+		WordPair pair = dao.read(5);
+	
+		pair.setFrequency(pair.getFrequency() + 1);
+		dao.update(pair, pair.FREQUENCY);
+//		Map map = example.read(5);
+//		System.out.println(map);
 	}
 }
 
